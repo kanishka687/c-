@@ -1,0 +1,28 @@
+class Solution {
+    int maxPath = INT_MIN;
+
+public:
+    int maxPathSum(TreeNode* root) {
+        calculateGain(root);
+        return maxPath;
+    }
+
+private:
+    int calculateGain(TreeNode* node) {
+        if (!node) return 0;
+
+        // Recursively get the max gain from subtrees
+        // If a gain is negative, we ignore it (take 0)
+        int leftGain = max(calculateGain(node->left), 0);
+        int rightGain = max(calculateGain(node->right), 0);
+
+        // The price of a new path starting and ending in this subtree
+        int currentPathSum = node->val + leftGain + rightGain;
+
+        // Update the global maximum if the current path is better
+        maxPath = max(maxPath, currentPathSum);
+
+        // Return the max gain this node can offer to its parent
+        return node->val + max(leftGain, rightGain);
+    }
+};
