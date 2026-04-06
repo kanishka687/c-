@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        // Initialize buy states to a very high value and profits to 0
+        int buy1 = INT_MAX, buy2 = INT_MAX;
+        int profit1 = 0, profit2 = 0;
+        
+        for (int price : prices) {
+            // State 1: First Buy - find the cheapest day to buy initially
+            buy1 = min(buy1, price);
+            
+            // State 2: First Sell - find max profit after 1st transaction
+            profit1 = max(profit1, price - buy1);
+            
+            // State 3: Second Buy - "reinvest" profit1 into the next stock.
+            // Effective cost = current price - profit already earned.
+            buy2 = min(buy2, price - profit1);
+            
+            // State 4: Second Sell - total profit after 2nd transaction
+            profit2 = max(profit2, price - buy2);
+        }
+        
+        return profit2;
+    }
+};
