@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        // Initialize a vector of size rowIndex + 1 with all 1s
+        vector<int> row(rowIndex + 1, 1);
+        
+        // Build the triangle row by row up to rowIndex
+        for (int i = 1; i <= rowIndex; ++i) {
+            // Update from right to left to avoid overwriting 
+            // the values needed for the current calculation
+            for (int j = i - 1; j >= 1; --j) {
+                row[j] = row[j] + row[j - 1];
+            }
+        }
+        
+        return row;
+    }
+};
