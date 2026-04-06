@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n = triangle.size();
+        
+        // Start from the second to last row and move up to the top
+        for (int row = n - 2; row >= 0; --row) {
+            for (int col = 0; col < triangle[row].size(); ++col) {
+                // Update current cell with its value + min of the two adjacent values below
+                triangle[row][col] += min(triangle[row + 1][col], 
+                                        triangle[row + 1][col + 1]);
+            }
+        }
+        
+        // The top element now holds the minimum path sum
+        return triangle[0][0];
+    }
+};
