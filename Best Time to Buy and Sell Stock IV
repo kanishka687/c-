@@ -1,0 +1,25 @@
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        if (prices.empty() || k == 0) return 0;
+
+        // buy[j] is the min cost/max profit to buy the j-th stock
+        // sell[j] is the max profit after selling the j-th stock
+        vector<int> buy(k + 1, INT_MIN);
+        vector<int> sell(k + 1, 0);
+
+        for (int price : prices) {
+            for (int j = 1; j <= k; j++) {
+                buy[j] = max(buy[j], sell[j - 1] - price);
+                sell[j] = max(sell[j], buy[j] + price);
+            }
+        }
+
+        return sell[k];
+    }
+};
