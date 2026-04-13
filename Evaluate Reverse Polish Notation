@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<long> st;
+        for (string& t : tokens) {
+            if (t == "+" || t == "-" || t == "*" || t == "/") {
+                long r = st.top(); st.pop();
+                long l = st.top(); st.pop();
+                if (t == "+") st.push(l + r);
+                else if (t == "-") st.push(l - r);
+                else if (t == "*") st.push(l * r);
+                else st.push(l / r); // C++ / operator already truncates toward zero
+            } else {
+                st.push(stoi(t));
+            }
+        }
+        return st.top();
+    }
+};
