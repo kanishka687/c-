@@ -1,0 +1,53 @@
+#include <vector>
+#include <numeric>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        if (n <= 2) return n;
+
+        int max_pts = 1;
+
+        for (int i = 0; i < n; i++) {
+            // Map to store the slope as a pair of simplified integers (dx, dy)
+            map<pair<int, int>, int> slopes;
+            for (int j = i + 1; j < n; j++) {
+                int dx = points[j][0] - points[i][0];
+                int dy = points[j][1] - points[i][1];
+
+                // Simplify the slope using GCD to avoid floating point precision issues
+                int g = gcd(dx, dy);
+                dx /= g;
+                dy /= g;
+
+                // Standardize direction (ensure (1,2) and (-1,-2) are treated the same)
+                if (dx < 0) {
+                    dx = -dx;
+                    dy = -dy;
+                } else if (dx == 0) {
+                    dy = abs(dy);
+                }
+
+                slopes[{dx, dy}]++;
+                max_pts = max(max_pts, slopes[{dx, dy}] + 1);
+            }
+        }
+
+        return max_pts;
+    }
+
+private:
+    // Helper function for GCD (C++17 has std::gcd in <numeric>)
+    int gcd(int a, int b) {
+        while (b) {
+            a %= b;
+            swap(a, b);
+        }
+        return a;
+    }
+};
