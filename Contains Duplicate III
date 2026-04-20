@@ -1,0 +1,31 @@
+#include <vector>
+#include <set>
+#include <algorithm>
+
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(std::vector<int>& nums, int indexDiff, int valueDiff) {
+        std::set<long long> window; // Use long long to prevent overflow during subtraction
+        
+        for (int i = 0; i < nums.size(); i++) {
+            // 1. Maintain window size: remove element out of indexDiff range
+            if (i > indexDiff) {
+                window.erase((long long)nums[i - indexDiff - 1]);
+            }
+            
+            // 2. Search for a value y in the set such that:
+            // y >= nums[i] - valueDiff
+            auto it = window.lower_bound((long long)nums[i] - valueDiff);
+            
+            // 3. Check if y also satisfies: y <= nums[i] + valueDiff
+            if (it != window.end() && *it <= (long long)nums[i] + valueDiff) {
+                return true;
+            }
+            
+            // 4. Add current number to the set
+            window.insert((long long)nums[i]);
+        }
+        
+        return false;
+    }
+};
