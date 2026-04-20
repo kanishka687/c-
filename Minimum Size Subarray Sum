@@ -1,0 +1,27 @@
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+class Solution {
+public:
+    int minSubArrayLen(int target, std::vector<int>& nums) {
+        int n = nums.size();
+        int left = 0;
+        long long sum = 0; // Use long long to prevent potential overflow
+        int minLength = INT_MAX;
+        
+        for (int right = 0; right < n; right++) {
+            sum += nums[right];
+            
+            // Try to shrink the window from the left as much as possible
+            while (sum >= target) {
+                minLength = std::min(minLength, right - left + 1);
+                sum -= nums[left];
+                left++;
+            }
+        }
+        
+        // If minLength was never updated, no such subarray exists
+        return (minLength == INT_MAX) ? 0 : minLength;
+    }
+};
