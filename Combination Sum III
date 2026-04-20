@@ -1,0 +1,36 @@
+#include <vector>
+
+class Solution {
+public:
+    void backtrack(int k, int n, int start, std::vector<int>& path, std::vector<std::vector<int>>& result) {
+        // Base Case: If we have k numbers
+        if (path.size() == k) {
+            // If they sum up to n, add to results
+            if (n == 0) {
+                result.push_back(path);
+            }
+            return;
+        }
+
+        // Optimization: if n is already negative, no point in continuing
+        if (n < 0) return;
+
+        for (int i = start; i <= 9; ++i) {
+            // Choice: include i
+            path.push_back(i);
+            
+            // Recurse: next number must be greater than i to avoid duplicates
+            backtrack(k, n - i, i + 1, path, result);
+            
+            // Backtrack: remove i
+            path.pop_back();
+        }
+    }
+
+    std::vector<std::vector<int>> combinationSum3(int k, int n) {
+        std::vector<std::vector<int>> result;
+        std::vector<int> path;
+        backtrack(k, n, 1, path, result);
+        return result;
+    }
+};
