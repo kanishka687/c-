@@ -1,0 +1,47 @@
+#include <vector>
+#include <algorithm>
+#include <set>
+
+class Solution {
+public:
+    std::vector<std::vector<int>> getSkyline(std::vector<std::vector<int>>& buildings) {
+        // 1. Create event points
+        std::vector<std::pair<int, int>> events;
+        for (const auto& b : buildings) {
+            events.push_back({b[0], -b[2]}); // Start of building
+            events.push_back({b[1], b[2]});  // End of building
+        }
+
+        // 2. Sort events: primarily by x, secondarily by height
+        std::sort(events.begin(), events.end());
+
+        std::vector<std::vector<int>> result;
+        // 3. Max-heap (using multiset) to track active heights
+        // Initialize with 0 to represent the ground
+        std::multiset<int> heights = {0};
+        int prevMaxHeight = 0;
+
+        for (const auto& event : events) {
+            int x = event.first;
+            int h = event.second;
+
+            if (h < 0) {
+                // Building starts: add height to set
+                heights.insert(-h);
+            } else {
+                // Building ends: remove height from set
+                // We use find() to only remove one instance of the height
+                heights.erase(heights.find(h));
+            }
+
+            // 4. Check if the current max height changed
+            int currMaxHeight = *heights.rbegin();
+            if (currMaxHeight != prevMaxHeight) {
+                result.push_back({x, currMaxHeight});
+                prevMaxHeight = currMaxHeight;
+            }
+        }
+
+        return result;
+    }
+};
