@@ -1,0 +1,24 @@
+#include <vector>
+#include <unordered_map>
+
+class Solution {
+public:
+    bool containsNearbyDuplicate(std::vector<int>& nums, int k) {
+        // Map to store: number -> its latest index
+        std::unordered_map<int, int> lastSeen;
+        
+        for (int i = 0; i < nums.size(); i++) {
+            // Check if the number has appeared before
+            if (lastSeen.find(nums[i]) != lastSeen.end()) {
+                // Check if the distance constraint is satisfied
+                if (i - lastSeen[nums[i]] <= k) {
+                    return true;
+                }
+            }
+            // Update the index of the current number to the latest one
+            lastSeen[nums[i]] = i;
+        }
+        
+        return false;
+    }
+};
