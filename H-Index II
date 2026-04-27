@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int n = citations.size();
+        int left = 0, right = n - 1;
+        int h = 0;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            // Number of papers with at least citations[mid] citations
+            int papersCount = n - mid;
+
+            if (citations[mid] >= papersCount) {
+                // Potential h-index found, try to find a larger one (smaller index)
+                h = papersCount;
+                right = mid - 1;
+            } else {
+                // Need more citations, move to the right
+                left = mid + 1;
+            }
+        }
+
+        return h;
+    }
+};
