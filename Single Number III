@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        // 1. Get the XOR sum of the two unique numbers
+        long xorSum = 0; // Use long to avoid overflow with -xorSum on INT_MIN
+        for (int n : nums) xorSum ^= n;
+
+        // 2. Find the rightmost set bit
+        long diffBit = xorSum & -xorSum;
+
+        // 3. Divide numbers into two groups and XOR each group
+        int a = 0, b = 0;
+        for (int n : nums) {
+            if (n & diffBit) {
+                a ^= n;
+            } else {
+                b ^= n;
+            }
+        }
+
+        return {a, b};
+    }
+};
