@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> ugly(n);
+        ugly[0] = 1; // The first ugly number is 1
+        
+        int p2 = 0, p3 = 0, p5 = 0;
+        
+        for (int i = 1; i < n; i++) {
+            // Calculate potential candidates
+            int next2 = ugly[p2] * 2;
+            int next3 = ugly[p3] * 3;
+            int next5 = ugly[p5] * 5;
+            
+            // Choose the smallest candidate as the next ugly number
+            int nextUgly = min({next2, next3, next5});
+            ugly[i] = nextUgly;
+            
+            // Increment pointers for the candidates that matched the min
+            if (nextUgly == next2) p2++;
+            if (nextUgly == next3) p3++;
+            if (nextUgly == next5) p5++;
+        }
+        
+        return ugly[n - 1];
+    }
+};
